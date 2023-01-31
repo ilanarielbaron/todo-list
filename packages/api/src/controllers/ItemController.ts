@@ -1,51 +1,51 @@
-import { Request, Response } from "express"
-import { Item } from "../entities/Item.entity"
-import { AppDataSource } from "../utils/data-source"
+import { Request, Response } from "express";
+import { Item } from "../entities/Item.entity";
+import { AppDataSource } from "../utils/data-source";
 
 const itemRepository = AppDataSource.getRepository(Item);
 
 export async function all() {
-    return itemRepository.find();
+  return itemRepository.find();
 }
 
 export async function one(request: Request) {
-    const id = parseInt(request.params.id);
+  const id = parseInt(request.params.id);
 
-    const item = await itemRepository.findOne({
-        where: { id }
-    });
+  const item = await itemRepository.findOne({
+    where: { id }
+  });
 
-    if (!item) {
-        return "No item found";
-    }
-    return item;
+  if (!item) {
+    return "No item found";
+  }
+  return item;
 }
 
 export async function save(request: Request, res: Response) {
-    const { description, order, checked } = request.body;
+  const { description, order, checked } = request.body;
 
-    if (order === undefined) return;
+  if (order === undefined) return;
 
-    const newItem = await itemRepository.insert({description, order, checked: checked ?? false});
+  const newItem = await itemRepository.insert({ description, order, checked: checked ?? false });
 
-    if (newItem) res.status(200).json({
-        status: 'success',
-        data: {
-            newItem,
-        },
-    });
+  if (newItem) res.status(200).json({
+    status: 'success',
+    data: {
+      newItem,
+    },
+  });
 }
 
 export async function remove(request: Request) {
-    const id = parseInt(request.params.id);
+  const id = parseInt(request.params.id);
 
-    let itemToRemove = await itemRepository.findOneBy({ id });
+  const itemToRemove = await itemRepository.findOneBy({ id });
 
-    if (!itemToRemove) {
-        return "this item not exist"
-    }
+  if (!itemToRemove) {
+    return "this item not exist";
+  }
 
-    await itemRepository.remove(itemToRemove);
+  await itemRepository.remove(itemToRemove);
 
-    return "item has been removed";
+  return "item has been removed";
 }

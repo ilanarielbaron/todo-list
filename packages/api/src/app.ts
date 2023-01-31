@@ -1,5 +1,5 @@
 require('dotenv').config();
-import express, { Response } from 'express';
+import express from 'express';
 import config from 'config';
 import validateEnv from './utils/validateEnv';
 import { AppDataSource } from './utils/data-source';
@@ -18,7 +18,7 @@ AppDataSource.initialize()
     app.use(express.json({ limit: '10kb' }));
 
     // ROUTES
-    app.use('/items', router)
+    app.use('/items', router);
     const port = config.get<number>('port');
     app.listen(port);
 

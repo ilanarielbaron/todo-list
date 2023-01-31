@@ -1,16 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 
 @Entity('items')
 export class Item extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
-    id: number
+      id: number;
 
     @Column()
-    description: string
+      description: string;
 
     @Column()
-    order: number
+      order: number;
 
     @Column()
-    checked: boolean
+      checked: boolean;
 }
