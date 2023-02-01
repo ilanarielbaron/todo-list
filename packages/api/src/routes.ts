@@ -1,15 +1,10 @@
-import express from 'express';
-import { all, one, save } from './controllers/ItemController';
+import express from "express";
+import { all, changeOrder, insertNew, remove } from "./controllers/ItemController";
 
 const router = express.Router();
 
-router
-  .route('/')
-  .post(save)
-  .get(all);
+router.route("/").post(insertNew).get(all).delete(remove);
 
-router
-  .route('/:id')
-  .get(one);
+router.route("/changeOrder").post(changeOrder);
 
 export default router;
