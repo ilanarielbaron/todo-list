@@ -5,7 +5,7 @@ import { AppDataSource } from "../utils/data-source";
 
 const itemRepository = AppDataSource.getRepository(Item);
 
-export async function all(res: Response) {
+export async function all(req: Request, res: Response) {
   try {
     const allItems = await itemRepository.find();
     return res.status(200).json({

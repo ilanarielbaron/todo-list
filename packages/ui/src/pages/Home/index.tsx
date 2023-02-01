@@ -1,4 +1,5 @@
 import { Alert, CircularProgress } from '@mui/material';
+import { ListItems } from '../../components/ListItems';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { selectErrorMessage, selectIsLoading } from '../../store/apiReducer';
 
@@ -10,7 +11,7 @@ const Home = () => {
 
 	if (isLoading) return <CircularProgress sx={{ marginTop: 5 }} />;
 
-	return <>{<h1> LIST </h1>}</>;
+	return <>{<ListItems />}</>;
 };
 
 export default Home;
