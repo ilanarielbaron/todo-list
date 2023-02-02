@@ -1,5 +1,16 @@
+
 # Ejercicio y objetivo
 Desarrollar el front y back de una app tipo todo list y poder cambiar el orden de las todos :) 
+
+## Pasos de ejecución:
+ - cd packages/api
+ - docker compose up -d
+ - yarn
+ - npx typeorm-ts-node-commonjs migration:run -d src/utils/data-source.ts
+ - yarn start
+ - cd ../ui 
+ - yarn
+ - yarn start
 
 ## Tech stack:
 * Front: React. Podés usar cualquier librería que necesites (usá el mismo criterio que usarías en la vida real para decidir si usar una librería o si hacer algo de cero).  
