@@ -108,3 +108,29 @@ export const editItemAPI = async (item: Partial<Item>): Promise<Item | null> => 
 		return null;
 	}
 };
+
+
+export const changeOrderAPI = async (id: string, order: number): Promise<Item[] | null> => {
+	const requestOptions = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			id,
+			order,
+		}),
+	};
+
+	try {
+		const response = await fetch(`${BASE_URL}/changeOrder`, requestOptions).then((data) =>
+			data.json()
+		);
+
+		if(!response.data?.items) return null;
+
+		return response.data.items;
+	} catch (error: unknown) {
+		return null;
+	}
+};

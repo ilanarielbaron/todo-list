@@ -1,9 +1,9 @@
+import { useEffect, useState } from 'react';
 import { IconButton, Input } from '@mui/material';
 import { Box } from '@mui/system';
+import { CancelOutlined } from '@mui/icons-material';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { setSearch } from '../../store/itemReducer';
-import { CancelOutlined } from '@mui/icons-material';
-import { useEffect, useState } from 'react';
 
 export const SearchForm = () => {
 	const [text, setText] = useState('');

@@ -87,10 +87,12 @@ export async function changeOrder(req: Request, res: Response) {
       order: Between(initialOrder, lastOrder),
     });
 
-    const itemsMapped = itemsToReorder.map((item) => ({
-      ...item,
-      order: initialOrder === order ? item.order + 1 : item.order - 1,
-    }));
+    const itemsMapped = itemsToReorder
+      .filter((i) => i.id !== itemToMove.id)
+      .map((item) => ({
+        ...item,
+        order: initialOrder === order ? item.order + 1 : item.order - 1,
+      }));
 
     const items = await itemRepository.save([
       ...itemsMapped,

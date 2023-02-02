@@ -1,6 +1,7 @@
+import { useState } from 'react';
+import { Draggable } from 'react-beautiful-dnd';
 import { Build, Delete } from '@mui/icons-material';
 import { Checkbox, Grid, IconButton, Paper } from '@mui/material';
-import { useState } from 'react';
 import { ItemForm } from '../ItemForm';
 
 const styles = {
@@ -42,35 +43,42 @@ export const Item = ({ item, removeItem, editItem }: Props) => {
 	};
 
 	return (
-		<Grid
-			xs={12}
-			item
-		>
-			<Paper elevation={2} style={styles.Paper}>
-				{isEditing ?
-					<ItemForm onSubmit={onEditDescription} initialState={item.description} onCancel={(): void => { setIsEditing(false); }} />
-					: (
-						<>
-							<Checkbox sx={styles.CheckBox} checked={item.checked} onChange={onToggleChecked} />
-							<span style={descriptionStyle}>{item.description}</span>
-							<IconButton
-								color="primary"
-								aria-label="Edit"
-								sx={styles.Icon}
-								onClick={() => setIsEditing(true)}
-							>
-								<Build fontSize="small" />
-							</IconButton>
-							<IconButton
-								color="secondary"
-								aria-label="Delete"
-								onClick={onDelete}
-							>
-								<Delete fontSize="small" />
-							</IconButton>
-						</>
-					)}
-			</Paper>
-		</Grid>
+		<Draggable draggableId={item.id} index={item.order}>
+			{(provided) => (
+				<Grid
+					ref={provided.innerRef}
+					{...provided.draggableProps}
+					{...provided.dragHandleProps}
+					xs={12}
+					item
+				>
+					<Paper elevation={2} style={styles.Paper}>
+						{isEditing ?
+							<ItemForm onSubmit={onEditDescription} initialState={item.description} onCancel={(): void => { setIsEditing(false); }} />
+							: (
+								<>
+									<Checkbox sx={styles.CheckBox} checked={item.checked} onChange={onToggleChecked} />
+									<span style={descriptionStyle}>{item.description}</span>
+									<IconButton
+										color="primary"
+										aria-label="Edit"
+										sx={styles.Icon}
+										onClick={() => setIsEditing(true)}
+									>
+										<Build fontSize="small" />
+									</IconButton>
+									<IconButton
+										color="secondary"
+										aria-label="Delete"
+										onClick={onDelete}
+									>
+										<Delete fontSize="small" />
+									</IconButton>
+								</>
+							)}
+					</Paper>
+				</Grid>
+			)}
+		</Draggable>
 	);
 };

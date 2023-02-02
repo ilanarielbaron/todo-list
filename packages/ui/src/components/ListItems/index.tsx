@@ -1,7 +1,8 @@
+import { DropResult } from 'react-beautiful-dnd';
+import { Box, Container } from '@mui/material';
 import { selectItems, selectSearchText } from '../../store/itemReducer';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { useItems } from '../../hooks/useItems';
-import { Box, Container } from '@mui/material';
 import { ItemForm } from '../ItemForm';
 import { List } from '../List';
 
@@ -14,11 +15,19 @@ const styles = {
 };
 
 export const ListItems = () => {
-	const { insertItem, removeItem, editItem } = useItems();
+	const { insertItem, removeItem, editItem, changeOrderItem } = useItems();
 	const items = useAppSelector(selectItems);
 	const searchText = useAppSelector(selectSearchText);
 
-	const itemsToDisplay = searchText === '' ? items : items.filter(item => item.description.includes(searchText));
+
+	const onDragEnd = ({ destination, draggableId }: DropResult) => {
+		// dropped outside the list
+		if (!destination || !draggableId) return;
+
+		changeOrderItem(draggableId, destination.index);
+	};
+
+	const itemsToDisplay = searchText === '' ? items : items.filter(item => item.description.toLowerCase().includes(searchText.toLowerCase()));
 
 	return (
 		<Container>
@@ -29,6 +38,7 @@ export const ListItems = () => {
 				items={itemsToDisplay}
 				removeItem={removeItem}
 				editItem={editItem}
+				onDragEnd={onDragEnd}
 			/>
 		</Container>
 	);
