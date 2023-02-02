@@ -1,10 +1,11 @@
 import { DropResult } from 'react-beautiful-dnd';
-import { Box, Container } from '@mui/material';
+import { Box, CircularProgress, Container } from '@mui/material';
 import { selectItems, selectSearchText } from '../../store/itemReducer';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { useItems } from '../../hooks/useItems';
 import { ItemForm } from '../ItemForm';
 import { List } from '../List';
+import { selectIsLoading } from '../../store/apiReducer';
 
 const styles = {
 	Paper: {
@@ -16,16 +17,17 @@ const styles = {
 
 export const ListItems = () => {
 	const { insertItem, removeItem, editItem, changeOrderItem } = useItems();
-	const items = useAppSelector(selectItems);
+	const items: Item[] = useAppSelector(selectItems);
 	const searchText = useAppSelector(selectSearchText);
 
 
 	const onDragEnd = ({ destination, draggableId }: DropResult) => {
-		// dropped outside the list
+		// Dropped outside the list
 		if (!destination || !draggableId) return;
-
 		changeOrderItem(draggableId, destination.index);
 	};
+
+	const isLoading = useAppSelector(selectIsLoading);
 
 	const itemsToDisplay = searchText === '' ? items : items.filter(item => item.description.toLowerCase().includes(searchText.toLowerCase()));
 
@@ -34,12 +36,13 @@ export const ListItems = () => {
 			<Box sx={styles.Paper}>
 				<ItemForm onSubmit={insertItem} />
 			</Box>
-			<List
+			{!isLoading && <List
 				items={itemsToDisplay}
 				removeItem={removeItem}
 				editItem={editItem}
 				onDragEnd={onDragEnd}
-			/>
+			/>}
+			{isLoading && <CircularProgress sx={{ marginTop: 5 }} />}
 		</Container>
 	);
 };
