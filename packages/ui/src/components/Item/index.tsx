@@ -1,5 +1,5 @@
 import { Build, Delete } from '@mui/icons-material';
-import { Grid, IconButton, Paper } from '@mui/material';
+import { Checkbox, Grid, IconButton, Paper } from '@mui/material';
 import { useState } from 'react';
 import { ItemForm } from '../ItemForm';
 
@@ -13,6 +13,9 @@ const styles = {
 		display: 'flex',
 		alignItems: 'center',
 		marginTop: 10,
+	},
+	CheckBox: {
+		marginRight: 2,
 	}
 };
 
@@ -30,6 +33,13 @@ export const Item = ({ item, removeItem, editItem }: Props) => {
 	const onEditDescription = (description: string) => {
 		editItem({ ...item, description });
 	};
+	const onToggleChecked = () => {
+		editItem({ ...item, checked: !item.checked });
+	};
+
+	const descriptionStyle = {
+		...(item.checked && { textDecoration: 'line-through' })
+	};
 
 	return (
 		<Grid
@@ -39,24 +49,26 @@ export const Item = ({ item, removeItem, editItem }: Props) => {
 			<Paper elevation={2} style={styles.Paper}>
 				{isEditing ?
 					<ItemForm onSubmit={onEditDescription} initialState={item.description} onCancel={(): void => { setIsEditing(false); }} />
-					: (<>
-						<span>{item.description}</span>
-						<IconButton
-							color="primary"
-							aria-label="Edit"
-							sx={styles.Icon}
-							onClick={() => setIsEditing(true)}
-						>
-							<Build fontSize="small" />
-						</IconButton>
-						<IconButton
-							color="secondary"
-							aria-label="Delete"
-							onClick={onDelete}
-						>
-							<Delete fontSize="small" />
-						</IconButton>
-					</>
+					: (
+						<>
+							<Checkbox sx={styles.CheckBox} checked={item.checked} onChange={onToggleChecked} />
+							<span style={descriptionStyle}>{item.description}</span>
+							<IconButton
+								color="primary"
+								aria-label="Edit"
+								sx={styles.Icon}
+								onClick={() => setIsEditing(true)}
+							>
+								<Build fontSize="small" />
+							</IconButton>
+							<IconButton
+								color="secondary"
+								aria-label="Delete"
+								onClick={onDelete}
+							>
+								<Delete fontSize="small" />
+							</IconButton>
+						</>
 					)}
 			</Paper>
 		</Grid>
