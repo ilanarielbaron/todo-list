@@ -13,13 +13,6 @@ const itemStateSlice = createSlice({
 		fetchAll: (state, action: PayloadAction<{ items: Item[] }>): void => {
 			state.items = action.payload.items.sort((a, b) => a.order - b.order);
 		},
-		toggleChecked: (state, action: PayloadAction<{ id: string }>): void => {
-			state.items = state.items.map((item) =>
-				item.id === action.payload.id
-					? { ...item, checked: !item.checked }
-					: item
-			);
-		},
 		updateItems: (state, action: PayloadAction<{ items: Item[] }>): void => {
 			const itemsToUpdate = action.payload.items;
 			state.items = current(state.items)
@@ -41,7 +34,7 @@ const itemStateSlice = createSlice({
 	},
 });
 
-export const { addItem, fetchAll, updateItems, toggleChecked, deleteItem, setSearch } =
+export const { addItem, fetchAll, updateItems, deleteItem, setSearch } =
   itemStateSlice.actions;
 
 export const selectItems = (state: RootState) => state.items.items;
