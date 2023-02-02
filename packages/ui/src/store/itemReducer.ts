@@ -1,7 +1,7 @@
 import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '.';
 
-export const initialState = { items: [] as Item[] };
+export const initialState = { items: [] as Item[], searchText: '' };
 
 const itemStateSlice = createSlice({
 	name: 'item',
@@ -35,12 +35,16 @@ const itemStateSlice = createSlice({
 				(item) => item.id !== action.payload.id
 			);
 		},
+		setSearch: (state, action: PayloadAction<{ text: string }>): void => {
+			state.searchText = action.payload.text;
+		},
 	},
 });
 
-export const { addItem, fetchAll, updateItems, toggleChecked, deleteItem } =
+export const { addItem, fetchAll, updateItems, toggleChecked, deleteItem, setSearch } =
   itemStateSlice.actions;
 
 export const selectItems = (state: RootState) => state.items.items;
+export const selectSearchText = (state: RootState) => state.items.searchText;
 
 export default itemStateSlice.reducer;

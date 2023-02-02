@@ -1,4 +1,4 @@
-import { selectItems } from '../../store/itemReducer';
+import { selectItems, selectSearchText } from '../../store/itemReducer';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { useItems } from '../../hooks/useItems';
 import { Box, Container } from '@mui/material';
@@ -16,6 +16,9 @@ const styles = {
 export const ListItems = () => {
 	const { insertItem, removeItem, editItem } = useItems();
 	const items = useAppSelector(selectItems);
+	const searchText = useAppSelector(selectSearchText);
+
+	const itemsToDisplay = searchText === '' ? items : items.filter(item => item.description.includes(searchText));
 
 	return (
 		<Container>
@@ -23,7 +26,7 @@ export const ListItems = () => {
 				<ItemForm onSubmit={insertItem} />
 			</Box>
 			<List
-				items={items}
+				items={itemsToDisplay}
 				removeItem={removeItem}
 				editItem={editItem}
 			/>

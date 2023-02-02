@@ -1,3 +1,4 @@
+//In a real life project it should reside in a .env file
 const BASE_URL = 'http://localhost:8000/items';
 
 interface FetchAPIInput {
