@@ -7,16 +7,15 @@ import router from "./routes";
 
 AppDataSource.initialize()
   .then(async () => {
-    // VALIDATE ENV
+    // Validate ENV
     validateEnv();
 
     const app = express();
 
-    // MIDDLEWARE
-
     // Body parser
     app.use(express.json({ limit: "10kb" }));
 
+    // Allow all origins
     app.all('/*', function(req, res, next) {
       res.header("Access-Control-Allow-Origin", "*");
       res.header('Access-Control-Allow-Headers', 'Content-Type');
@@ -24,7 +23,7 @@ AppDataSource.initialize()
       next();
     });
 
-    // ROUTES
+    // Routes
     app.use("/items", router);
     const port = config.get<number>("port");
     app.listen(port);

@@ -5,6 +5,7 @@ import { AppDataSource } from "../utils/data-source";
 
 const itemRepository = AppDataSource.getRepository(Item);
 
+/** Get all the items */
 export async function all(req: Request, res: Response) {
   try {
     const allItems = await itemRepository.find();
@@ -22,6 +23,7 @@ export async function all(req: Request, res: Response) {
   }
 }
 
+/** Insert new item */
 export async function insertNew(req: Request, res: Response) {
   const { description, checked } = req.body;
 
@@ -63,6 +65,7 @@ export async function insertNew(req: Request, res: Response) {
   }
 }
 
+/** Change order for one item and reorder */
 export async function changeOrder(req: Request, res: Response) {
   const { id, order } = req.body;
 
@@ -113,6 +116,7 @@ export async function changeOrder(req: Request, res: Response) {
   }
 }
 
+/** Edit one item */
 export async function edit(req: Request, res: Response) {
   const { id, checked, description } = req.body;
 
@@ -150,6 +154,7 @@ export async function edit(req: Request, res: Response) {
   }
 }
 
+/** Remove one item and reorder */
 export async function remove(req: Request, res: Response) {
   const id = req.body.id;
 
