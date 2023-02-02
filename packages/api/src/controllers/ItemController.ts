@@ -36,17 +36,16 @@ export async function insertNew(req: Request, res: Response) {
       take: 1,
       order: { order: "DESC" },
     });
-    if (maxOrderItem.length !== 1)
-      return res.status(401).json({
-        status: "fail",
-        message: "Error when creating new item",
-      });
 
-    const maxOrder = maxOrderItem[0].order;
-    const newItem = await itemRepository.insert({
+    const maxOrder = maxOrderItem?.length > 0 ? maxOrderItem[0].order : 0;
+    const newItemId = await itemRepository.insert({
       description,
       order: maxOrder + 1,
       checked: checked ?? false,
+    });
+
+    const newItem = await itemRepository.findOneBy({
+      id: newItemId.identifiers[0].id,
     });
 
     if (newItem)
@@ -112,13 +111,13 @@ export async function changeOrder(req: Request, res: Response) {
   }
 }
 
-export async function toggleCheck(req: Request, res: Response) {
-  const { id, checked } = req.body;
+export async function edit(req: Request, res: Response) {
+  const { id, checked, description } = req.body;
 
-  if (id === undefined || checked === undefined)
+  if (id === undefined)
     return res.status(401).json({
       status: "fail",
-      message: "Id & checked parameters needed",
+      message: "Id is needed",
     });
 
   try {
@@ -129,15 +128,22 @@ export async function toggleCheck(req: Request, res: Response) {
         message: "Item not found",
       });
 
-    await itemRepository.save({ ...item, checked });
+    const itemEdited = await itemRepository.save({
+      ...item,
+      checked,
+      description,
+    });
 
     return res.status(200).json({
       status: "success",
+      data: {
+        item: itemEdited,
+      },
     });
   } catch (error: unknown) {
     return res.status(409).json({
       status: "fail",
-      message: "Error when toggling item check",
+      message: "Error when editing item",
     });
   }
 }

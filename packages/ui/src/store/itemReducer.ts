@@ -1,7 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '.';
 
-export const initialState = {items: [] as Item[]};
+export const initialState = { items: [] as Item[] };
 
 const itemStateSlice = createSlice({
 	name: 'item',
@@ -11,8 +11,7 @@ const itemStateSlice = createSlice({
 			state.items = [...state.items, action.payload.newItem];
 		},
 		fetchAll: (state, action: PayloadAction<{ items: Item[] }>): void => {
-			console.log(action.payload.items);
-			state.items = action.payload.items;
+			state.items = action.payload.items.sort((a, b) => a.order - b.order);
 		},
 		toggleChecked: (state, action: PayloadAction<{ id: string }>): void => {
 			state.items = state.items.map((item) =>
@@ -23,16 +22,23 @@ const itemStateSlice = createSlice({
 		},
 		updateItems: (state, action: PayloadAction<{ items: Item[] }>): void => {
 			const itemsToUpdate = action.payload.items;
-			state.items = state.items.map(
-				(item) =>
-					itemsToUpdate.find((itemToUpdate) => itemToUpdate.id === item.id) ??
-          item
+			state.items = current(state.items)
+				.map(
+					(item) =>
+						itemsToUpdate.find((itemToUpdate) => itemToUpdate.id === item.id) ??
+            item
+				)
+				.sort((a, b) => a.order - b.order);
+		},
+		deleteItem: (state, action: PayloadAction<{ id: string }>): void => {
+			state.items = current(state.items).filter(
+				(item) => item.id !== action.payload.id
 			);
 		},
 	},
 });
 
-export const { addItem, fetchAll, updateItems, toggleChecked } =
+export const { addItem, fetchAll, updateItems, toggleChecked, deleteItem } =
   itemStateSlice.actions;
 
 export const selectItems = (state: RootState) => state.items.items;

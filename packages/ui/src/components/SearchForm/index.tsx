@@ -5,7 +5,7 @@ import { Box } from '@mui/system';
 export const SearchForm = () => {
 	const [text, setText] = useState('');
 
-	const handleSubmit = (e: any): void => {
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
 		if (text === '') {
 			return;
@@ -22,7 +22,7 @@ export const SearchForm = () => {
 						inputProps={{
 							'aria-label': 'Description'
 						}}
-						onChange={(e: any): void => { setText(e.target.value); }}
+						onChange={(e): void => { setText(e.target.value); }}
 					/>
 
 					<Button
@@ -36,5 +36,4 @@ export const SearchForm = () => {
 			</Box>
 		</form>
 	);
-
 };

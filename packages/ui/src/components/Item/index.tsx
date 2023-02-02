@@ -1,5 +1,7 @@
 import { Build, Delete } from '@mui/icons-material';
 import { Grid, IconButton, Paper } from '@mui/material';
+import { useState } from 'react';
+import { ItemForm } from '../ItemForm';
 
 const styles = {
 	Icon: {
@@ -15,12 +17,18 @@ const styles = {
 };
 
 interface Props {
-  item: Item;
+	item: Item;
+	removeItem: (id: string) => void;
+	editItem: (item: Partial<Item>) => void;
 }
 
-export const Item = ({ item }: Props) => {
+export const Item = ({ item, removeItem, editItem }: Props) => {
+	const [isEditing, setIsEditing] = useState(false);
 	const onDelete = () => {
-		//deleteItem(item.id)
+		removeItem(item.id);
+	};
+	const onEditDescription = (description: string) => {
+		editItem({ ...item, description });
 	};
 
 	return (
@@ -29,22 +37,27 @@ export const Item = ({ item }: Props) => {
 			item
 		>
 			<Paper elevation={2} style={styles.Paper}>
-				<span>{item.description}</span>
-				<IconButton
-					color="primary"
-					aria-label="Edit"
-					sx={styles.Icon}
-					//onClick={() => this.props.updateTodo(this.props.index)}
-				>
-					<Build fontSize="small" />
-				</IconButton>
-				<IconButton
-					color="secondary"
-					aria-label="Delete"
-					onClick={onDelete}
-				>
-					<Delete fontSize="small" />
-				</IconButton>
+				{isEditing ?
+					<ItemForm onSubmit={onEditDescription} initialState={item.description} onCancel={(): void => { setIsEditing(false); }} />
+					: (<>
+						<span>{item.description}</span>
+						<IconButton
+							color="primary"
+							aria-label="Edit"
+							sx={styles.Icon}
+							onClick={() => setIsEditing(true)}
+						>
+							<Build fontSize="small" />
+						</IconButton>
+						<IconButton
+							color="secondary"
+							aria-label="Delete"
+							onClick={onDelete}
+						>
+							<Delete fontSize="small" />
+						</IconButton>
+					</>
+					)}
 			</Paper>
 		</Grid>
 	);

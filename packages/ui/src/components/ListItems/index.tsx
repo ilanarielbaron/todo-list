@@ -2,7 +2,7 @@ import { selectItems } from '../../store/itemReducer';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { useItems } from '../../hooks/useItems';
 import { Box, Container } from '@mui/material';
-import { AddForm } from '../AddForm';
+import { ItemForm } from '../ItemForm';
 import { List } from '../List';
 
 const styles = {
@@ -14,16 +14,18 @@ const styles = {
 };
 
 export const ListItems = () => {
-	const { insertItem } = useItems();
+	const { insertItem, removeItem, editItem } = useItems();
 	const items = useAppSelector(selectItems);
 
 	return (
 		<Container>
 			<Box sx={styles.Paper}>
-				<AddForm insertItem={insertItem} />
+				<ItemForm onSubmit={insertItem} />
 			</Box>
 			<List
 				items={items}
+				removeItem={removeItem}
+				editItem={editItem}
 			/>
 		</Container>
 	);
